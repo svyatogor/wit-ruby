@@ -143,7 +143,13 @@ class Wit
         'text' => json['msg'],
         'quickreplies' => json['quickreplies'],
       }
-      @actions[:send].call(request, response)
+      
+      if @actions[:send].arity == 2
+        @actions[:send].call(request, response)
+      elsif @actions[:send].arity == 3
+        @actions[:send].call(request, response, json)
+      end
+
     elsif json['type'] == 'action'
       action = json['action'].to_sym
       throw_if_action_missing(action)
